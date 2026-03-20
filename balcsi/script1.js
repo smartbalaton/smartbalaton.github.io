@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
  // --- UPDATED ---
     // 1. Set the total number of images you have.
-    const totalImages = 59; 
+    const totalImages = 73; 
     
     // 2. Define the naming pattern and folder.
     const filePrefix = 'balaton_';
