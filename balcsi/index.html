@@ -7,10 +7,19 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <h1>Balaton felújítás</h1>
-    <div id="gallery-container" class="gallery-container">
-        <!-- Thumbnails will be inserted here by JavaScript -->
+
+    <div class="tabs-container">
+        <button class="tab-button active" data-tab="felujitas">Felújítás</button>
+        <button class="tab-button" data-tab="latvany">Látványtervek</button>
+    </div>
+
+    <div id="felujitas" class="tab-content active">
+        <div id="gallery-container-felujitas" class="gallery-container"></div>
+    </div>
+
+    <div id="latvany" class="tab-content">
+        <div id="gallery-container-latvany" class="gallery-container"></div>
     </div>
 
     <!-- The Modal -->
@@ -26,3 +35,4 @@
     <script src="script1.js"></script>
 </body>
 </html>
+

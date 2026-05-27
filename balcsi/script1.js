@@ -1,77 +1,115 @@
 document.addEventListener('DOMContentLoaded', function() {
+    const galleries = {
+        felujitas: {
+            totalImages: 114,
+            filePrefix: 'balaton_',
+            fileExtension: '.jpg',
+            imageFolder: 'gallery/',
+            images: []
+        },
+        latvany: {
+            totalImages: 16,
+            filePrefix: 'latvany_',
+            fileExtension: '.jpg',
+            imageFolder: 'latvany/',
+            images: []
+        }
+    };
 
- // --- UPDATED ---
-    // 1. Set the total number of images you have.
-    const totalImages = 73; 
-    
-    // 2. Define the naming pattern and folder.
-    const filePrefix = 'balaton_';
-    const fileExtension = '.jpg';
-    const imageFolder = 'gallery/';
+    // Build image arrays
+    Object.keys(galleries).forEach(galleryKey => {
+        const gallery = galleries[galleryKey];
+        gallery.images = [];
+        for (let i = 1; i <= gallery.totalImages; i++) {
+            const imageNumber = i.toString().padStart(3, '0');
+            const imageName = `${gallery.filePrefix}${imageNumber}${gallery.fileExtension}`;
+            gallery.images.push(imageName);
+        }
+        gallery.images.reverse();
+    });
 
-    // 3. The array is now built dynamically.
-    const fullImageNames = [];
-    for (let i = 1; i <= totalImages; i++) {
-        // Pad the number to three digits (e.g., 1 -> "001", 12 -> "012", 120 -> "120")
-        const imageNumber = i.toString().padStart(3, '0');
-        const imageName = `${filePrefix}${imageNumber}${fileExtension}`; // e.g., "balaton_001.jpg"
-        fullImageNames.push(imageName);
-    }
-    // --- END OF UPDATES ---
-
-
-    const galleryContainer = document.getElementById('gallery-container');
     const modal = document.getElementById('myModal');
     const modalImg = document.getElementById('modal-image');
     const closeBtn = document.querySelector('.close');
     const prevBtn = document.querySelector('.prev');
     const nextBtn = document.querySelector('.next');
+    const tabButtons = document.querySelectorAll('.tab-button');
 
     let currentImageIndex;
+    let currentGallery = 'felujitas';
 
-    // Populate the gallery
-    fullImageNames.forEach((imageName, index) => {
-        const thumbSrc = imageFolder + 'tn_' + imageName; // Creates path like 'gallery/tn_image1.jpg'
-        
-        const img = document.createElement('img');
-        img.src = thumbSrc;
-        img.dataset.index = index;
-        img.alt = imageName; // Good for accessibility
-        galleryContainer.appendChild(img);
+    // Initialize galleries
+    function initGallery(galleryKey) {
+        const gallery = galleries[galleryKey];
+        const containerId = `gallery-container-${galleryKey}`;
+        const container = document.getElementById(containerId);
+        container.innerHTML = '';
+
+        gallery.images.forEach((imageName, index) => {
+            const thumbSrc = gallery.imageFolder + 'tn_' + imageName;
+            const img = document.createElement('img');
+            img.src = thumbSrc;
+            img.dataset.index = index;
+            img.dataset.gallery = galleryKey;
+            img.alt = imageName;
+            container.appendChild(img);
+        });
+    }
+
+    // Initialize both galleries
+    initGallery('felujitas');
+    initGallery('latvany');
+
+    // Tab switching
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const tabName = button.dataset.tab;
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(tabName).classList.add('active');
+
+            currentGallery = tabName;
+        });
     });
 
-    // Function to open the modal
-    function openModal(index) {
-        currentImageIndex = parseInt(index);
-        const fullImageSrc = imageFolder + fullImageNames[currentImageIndex]; // Creates path like 'gallery/image1.jpg'
+    // Gallery click handlers
+    document.querySelectorAll('.gallery-container').forEach(container => {
+        container.addEventListener('click', function(e) {
+            if (e.target.tagName === 'IMG') {
+                currentGallery = e.target.dataset.gallery;
+                currentImageIndex = parseInt(e.target.dataset.index);
+                openModal();
+            }
+        });
+    });
+
+    function openModal() {
+        const gallery = galleries[currentGallery];
+        const fullImageSrc = gallery.imageFolder + gallery.images[currentImageIndex];
         modal.style.display = 'block';
         modalImg.src = fullImageSrc;
     }
 
-    // Function to close the modal
     function closeModal() {
         modal.style.display = 'none';
     }
 
-    // Function to show the next or previous image
     function changeImage(direction) {
+        const gallery = galleries[currentGallery];
         currentImageIndex += direction;
-        if (currentImageIndex >= fullImageNames.length) {
+        if (currentImageIndex >= gallery.images.length) {
             currentImageIndex = 0;
         }
         if (currentImageIndex < 0) {
-            currentImageIndex = fullImageNames.length - 1;
+            currentImageIndex = gallery.images.length - 1;
         }
-        const fullImageSrc = imageFolder + fullImageNames[currentImageIndex];
+        const fullImageSrc = gallery.imageFolder + gallery.images[currentImageIndex];
         modalImg.src = fullImageSrc;
     }
-
-    // Event Listeners (no changes here)
-    galleryContainer.addEventListener('click', function(e) {
-        if (e.target.tagName === 'IMG') {
-            openModal(e.target.dataset.index);
-        }
-    });
 
     closeBtn.addEventListener('click', closeModal);
     modal.addEventListener('click', (e) => {

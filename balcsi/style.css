@@ -9,6 +9,41 @@ h1 {
     margin: 20px 0;
 }
 
+.tabs-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+    border-bottom: 2px solid #ddd;
+}
+
+.tab-button {
+    padding: 10px 20px;
+    background-color: #e0e0e0;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px 5px 0 0;
+    transition: background-color 0.3s;
+}
+
+.tab-button:hover {
+    background-color: #c0c0c0;
+}
+
+.tab-button.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
 .gallery-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
