@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
             images: []
         },
         latvany: {
-            totalImages: 16,
+            totalImages: 18,
             filePrefix: 'latvany_',
             fileExtension: '.jpg',
             imageFolder: 'latvany/',
