@@ -13,6 +13,13 @@ document.addEventListener('DOMContentLoaded', function() {
             fileExtension: '.jpg',
             imageFolder: 'latvany/',
             images: []
+        },
+        oktnov: {
+            totalImages: 41,
+            filePrefix: 'oktnov_',
+            fileExtension: '.jpg',
+            imageFolder: 'oktnov/',
+            images: []
         }
     };
 
@@ -43,6 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const gallery = galleries[galleryKey];
         const containerId = `gallery-container-${galleryKey}`;
         const container = document.getElementById(containerId);
+        if (!container) { console.warn('Missing container: ' + containerId); return; }
         container.innerHTML = '';
 
         gallery.images.forEach((imageName, index) => {
@@ -59,6 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize both galleries
     initGallery('felujitas');
     initGallery('latvany');
+    initGallery('oktnov');
 
     // Tab switching
     tabButtons.forEach(button => {
